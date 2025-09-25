@@ -28,12 +28,8 @@ def serve (server : TCP.Socket.Server) : Async Unit := do
     let client ← server.accept
     Std.Http.Server.serveConnection client getTime (fun _ => return ())
 
--- def serveMany (server : TCP.Socket.Server) : Async Unit := do
---   discard <| Async.concurrently (serve server) (serve server)
-
 def main : IO Unit := do
   let server ← TCP.Socket.Server.mk
-  server.bind (Std.Net.SocketAddress.v4 ⟨.ofParts 127 0 0 1, 8007⟩)
+  server.bind (Std.Net.SocketAddress.v6 ⟨.ofParts 0 0 0 0 0 0 0 0, 8007⟩)
   server.listen 100
   (serve server).wait
-  -- (serveMany server).wait
