@@ -21,7 +21,7 @@ def getTime (req : Std.Http.Request Std.Http.Body) : Async (Std.Http.Response St
     return Std.Http.Response.new
       |>.status .movedPermanently
       |>.header "Location" "/Europe/Berlin"
-      |>.build
+      |>.text s!"Please go to /Europe/Berlin"
 
 def serve (server : TCP.Socket.Server) : Async Unit := do
   while true do
