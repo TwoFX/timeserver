@@ -1,0 +1,10 @@
+name = "timeserver"
+version = "0.1.0"
+defaultTargets = ["timeserver"]
+
+[[lean_lib]]
+name = "Timeserver"
+
+[[lean_exe]]
+name = "timeserver"
+root = "Main"
