@@ -24,13 +24,5 @@ def getTime (req : Std.Http.Request Std.Http.Body) : Async (Std.Http.Response St
       |>.header "Location" (.new "/Europe/Berlin")
       |>.text s!"Please go to /Europe/Berlin"
 
-def serve (server : TCP.Socket.Server) : Async Unit := do
-  while true do
-    let client ← server.accept
-    Std.Http.Server.serveConnection client getTime (fun _ => return ())
-
 def main : IO Unit := do
-  let server ← TCP.Socket.Server.mk
-  server.bind (Std.Net.SocketAddress.v6 ⟨.ofParts 0 0 0 0 0 0 0 0, 8007⟩)
-  server.listen 100
-  (serve server).wait
+  (Std.Http.Server.serve (.v6 ⟨.ofParts 0 0 0 0 0 0 0 0, 8007⟩) getTime).block
