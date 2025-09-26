@@ -5,16 +5,17 @@ import Std.Time
 open Std.Internal.IO.Async
 
 def extractZoneId (p : Std.Http.URI.Path) : Option String :=
-  if p.segments.isEmpty then
+  let segs := p.segments.filter (!·.isEmpty)
+  if segs.isEmpty then
     none
   else
-    some (String.intercalate "/" p.segments.toList)
+    some (String.intercalate "/" segs.toList)
 
 def getTime (req : Std.Http.Request Std.Http.Body) : Async (Std.Http.Response Std.Http.Body) := do
   if let some p := req.head.uri.path?.bind extractZoneId then
     try
       let t ← Std.Time.ZonedDateTime.nowAt p
-      return .ok s!"<html><body>The current time in {p} is {t}.</body></html>"
+      return Std.Http.Response.new |>.status .ok |>.text s!"<html><body>The current time in {p} is {t}.</body></html>"
     catch _ =>
       return .notFound s!"<html><body>Time zone {p} was not found.</body></html>"
   else
