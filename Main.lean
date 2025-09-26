@@ -20,7 +20,7 @@ def getTime (req : Std.Http.Request Std.Http.Body) : Async (Std.Http.Response St
   else
     return Std.Http.Response.new
       |>.status .movedPermanently
-      |>.header "Location" "/Europe/Berlin"
+      |>.header "Location" (.new "/Europe/Berlin")
       |>.text s!"Please go to /Europe/Berlin"
 
 def serve (server : TCP.Socket.Server) : Async Unit := do
